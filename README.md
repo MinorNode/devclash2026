@@ -1,6 +1,6 @@
-# DevClash — AI Meeting Intelligence System
+# AI Meeting Intelligence System
 
-DevClash is a real-time meeting assistant that transforms raw audio into actionable intelligence. By capturing both microphone and system audio, the platform uses advanced AI models to provide live transcription, automated meeting summaries, and intelligent task assignments with email notifications.
+a real-time meeting assistant that transforms raw audio into actionable intelligence. By capturing both microphone and system audio, the platform uses advanced AI models to provide live transcription, automated meeting summaries, and intelligent task assignments with email notifications.
 
 ---
 
