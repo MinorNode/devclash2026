@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Meeting Intelligence</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="snowflakes" aria-hidden="true">
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="login-card glass-card">
+            <div class="login-header">
+                <p class="eyebrow">AI Live Meeting Intelligence System</p>
+                <h1>Sign In</h1>
+                <p class="subtitle">Enter your credentials to access your dashboard.</p>
+            </div>
+
+            <form id="loginForm" autocomplete="off">
+                <div class="login-field">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="you@company.com" required>
+                </div>
+                <div class="login-field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+
+                <div id="loginError" class="login-error hidden"></div>
+
+                <button type="submit" class="meeting-assistant-btn login-submit-btn">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/login.js"></script>
+</body>
+</html>

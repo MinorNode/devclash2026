@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Oversight — Meeting Intelligence</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="snowflakes" aria-hidden="true">
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+    </div>
+
+    <div class="page-shell">
+        <header class="topbar topbar-with-action">
+            <div>
+                <p class="eyebrow">AI Live Meeting Intelligence System</p>
+                <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                    <h1 style="margin-bottom: 0;">Team Intelligence Oversight</h1>
+                    <span class="badge manager-badge">🔒 Manager Access</span>
+                </div>
+                <p class="subtitle">
+                    Monitor team-wide task assignments, deadlines, and performance across all meetings.
+                </p>
+            </div>
+            <div class="topbar-action">
+                <a href="index.html" class="secondary-btn">← Back to Dashboard</a>
+            </div>
+        </header>
+
+        <main>
+            <!-- Manager Stats -->
+            <section class="section-block">
+                <div class="stats-grid" id="managerStatsGrid"></div>
+            </section>
+
+            <!-- Chart + Priority Deadlines -->
+            <section class="section-block">
+                <div class="dashboard-two-col">
+                    <div class="glass-card">
+                        <div class="card-heading-row">
+                            <h3>Weekly Target Completion</h3>
+                            <span class="badge">Live</span>
+                        </div>
+                        <div class="chart-area">
+                            <canvas id="weeklyTargetChart" width="220" height="220"></canvas>
+                            <div class="chart-legend" id="chartLegend"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-heading-row">
+                            <h3>Priority Deadlines</h3>
+                            <span class="badge" id="managerUrgentBadge">0 Critical</span>
+                        </div>
+                        <div id="priorityDeadlinesList" class="deadline-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Task Table -->
+            <section class="section-block">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <h2>Team-Wide Task Assignment</h2>
+                    <div class="manager-filters">
+                        <div class="filter-group">
+                            <label for="employeeFilter" class="filter-label">Employee</label>
+                            <select id="employeeFilter" class="manager-select">
+                                <option value="all">All Employees</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="priorityFilter" class="filter-label">Priority</label>
+                            <select id="priorityFilter" class="manager-select">
+                                <option value="all">All Priorities</option>
+                                <option value="High">High → Low</option>
+                                <option value="Medium">Medium only</option>
+                                <option value="Low">Low only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="table-wrapper">
+                        <table class="task-table">
+                            <thead>
+                                <tr>
+                                    <th>Team Member</th>
+                                    <th>Task</th>
+                                    <th>Deadline</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teamTasksTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/manager.js"></script>
+</body>
+</html>

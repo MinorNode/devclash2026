@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Intelligence Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="snowflakes" aria-hidden="true">
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+    </div>
+
+    <div class="page-shell">
+        <header class="topbar topbar-with-action">
+            <div>
+                <p class="eyebrow">AI Live Meeting Intelligence System</p>
+                <h1 id="dashboardUserTitle">Welcome</h1>
+                <p class="subtitle" id="dashboardSubtitle">
+                    Your personal meeting workspace with tasks, deadlines, and meeting history.
+                </p>
+            </div>
+
+            <div class="topbar-action">
+                <a href="meeting-summary.html" class="secondary-btn">Meeting Summary</a>
+                <a href="manager.html" class="secondary-btn" id="managerViewBtn">Manager View</a>
+                <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
+                <div id="meetingTimerContainer" class="timer-display hidden">
+                    <span class="timer-dot"></span>
+                    <span id="meetingTimer">00:00</span>
+                </div>
+                <button class="meeting-assistant-btn" id="startMeetingBtn" type="button">
+                    Start Meeting Assistant
+                </button>
+                <button class="meeting-assistant-btn stop-btn hidden" id="stopMeetingBtn" type="button">
+                    Stop Meeting Assistant
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="section-block">
+                <div class="stats-grid" id="statsGrid"></div>
+            </section>
+
+            <section class="section-block">
+                <div class="section-header">
+                    <h2>Assigned Tasks Across Meetings</h2>
+                </div>
+
+                <div class="glass-card">
+                    <div class="table-wrapper">
+                        <table class="task-table">
+                            <thead>
+                                <tr>
+                                    <th>Meeting</th>
+                                    <th>Task</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTasksTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-block">
+                <div class="dashboard-two-col">
+                    <div class="glass-card">
+                        <div class="card-heading-row">
+                            <h3>Urgent Deadlines</h3>
+                            <span class="badge" id="urgentCountBadge">0</span>
+                        </div>
+                        <div id="urgentTasksList" class="deadline-list"></div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-heading-row">
+                            <h3>Quick Access</h3>
+                        </div>
+
+                        <div class="quick-links-grid">
+                            <a href="meeting-summary.html" class="quick-link-card">
+                                <h4>Latest Meeting View</h4>
+                                <p>Open the post-meeting intelligence page.</p>
+                            </a>
+
+                            <div class="quick-link-card clickable-card" id="openDashboardPastMeetingsModal">
+                                <h4>Past Meetings</h4>
+                                <p>Browse all previous meetings and open full details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-block">
+                <div class="section-header">
+                    <h2>Recent Meetings Overview</h2>
+                </div>
+                <div class="meeting-overview-grid" id="recentMeetingsOverview"></div>
+            </section>
+        </main>
+    </div>
+
+    <aside class="transcript-panel hidden" id="transcriptPanel">
+        <div class="transcript-panel-header">
+            <div>
+                <h3>Live Transcript</h3>
+                <p class="transcript-status">Listening...</p>
+            </div>
+            <span class="timer-dot"></span>
+        </div>
+        <div class="transcript-panel-body" id="transcriptPanelBody"></div>
+    </aside>
+
+    <div class="modal-overlay hidden" id="dashboardPastMeetingsModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3>Past Meetings</h3>
+                    <p>Click any meeting to view the complete meeting details.</p>
+                </div>
+                <button class="icon-btn" id="closeDashboardPastMeetingsModal" type="button">&times;</button>
+            </div>
+
+            <div class="modal-body" id="dashboardPastMeetingsList"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

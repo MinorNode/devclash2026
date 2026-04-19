@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Discovery & Summary</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="snowflakes" aria-hidden="true">
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+    </div>
+
+    <div class="page-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">AI Live Meeting Intelligence System</p>
+                <h1>Meeting Summary</h1>
+                <p class="subtitle">
+                    Track your latest meeting insights, assigned tasks, notes, and past meeting records in one place.
+                </p>
+            </div>
+        </header>
+
+        <main>
+            <section class="section-block">
+                <div class="section-header">
+                    <h2>Recent Meeting</h2>
+                </div>
+
+                <div class="recent-meeting-grid">
+                    <div class="glass-card summary-card" id="recentSummaryCard"></div>
+
+                    <div class="side-panel-grid">
+                        <div class="glass-card liquid-card">
+                            <div class="card-heading-row">
+                                <h3>Tasks Assigned</h3>
+                                <span class="badge" id="taskCountBadge">0</span>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="task-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Person</th>
+                                            <th>Task</th>
+                                            <th>Deadline</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentTasksBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="glass-card liquid-card">
+                            <div class="card-heading-row">
+                                <h3>Key Notes</h3>
+                                <span class="badge" id="notesCountBadge">0</span>
+                            </div>
+                            <ul class="notes-list" id="recentNotesList"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-block">
+                <div class="section-header">
+                    <h2>Past Meetings</h2>
+                </div>
+
+                <div class="past-meeting-trigger-card" id="openPastMeetingsModal">
+                    <div>
+                        <h3>View All Past Meetings</h3>
+                        <p>Open the complete list of past meetings with title, date, and time.</p>
+                    </div>
+                    <button class="primary-btn" type="button">Open List</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-overlay hidden" id="pastMeetingsModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3>Past Meetings</h3>
+                    <p>Click any meeting to open its full details page.</p>
+                </div>
+                <button class="icon-btn" id="closePastMeetingsModal" type="button">&times;</button>
+            </div>
+
+            <div class="modal-body" id="pastMeetingsList"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

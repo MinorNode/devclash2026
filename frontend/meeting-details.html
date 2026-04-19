@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Details</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="snowflakes" aria-hidden="true">
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+        <span class="snowflake"></span>
+    </div>
+
+    <div class="page-shell">
+        <header class="details-hero">
+            <div class="details-hero-left">
+                <p class="eyebrow">AI Live Meeting Intelligence System</p>
+                <h1 id="detailsTitle">Meeting Details</h1>
+                <p class="subtitle" id="detailsMeta">Loading meeting information...</p>
+                <div class="hero-meta-row" id="heroMetaRow"></div>
+            </div>
+
+            <div class="details-hero-right">
+                <a href="index.html" class="secondary-btn">← Back to Dashboard</a>
+                <button class="primary-btn" id="downloadPdfBtn" type="button">Download PDF</button>
+            </div>
+        </header>
+
+        <main id="meetingDetailsContainer"></main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/meeting-details.js"></script>
+</body>
+</html>
