@@ -12,13 +12,19 @@ const DISPLAY_FILE = path.join(process.cwd(), 'data', 'display.json');
 
 // Google SMTP Config
 const GMAIL_USER = process.env.GMAIL_USER;
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
-    }
-});
+let transporter = null;
+
+if (GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+    transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+} else {
+    console.warn('[MAILER WARNING] GMAIL_USER or GMAIL_APP_PASSWORD is missing in .env. Notifications are disabled.');
+}
 
 /**
  * Resolve an employee's email from their name/alias.
@@ -81,6 +87,10 @@ function buildEmailHTML(employeeName, meetingTitle, tasks) {
  * Reads display.json (last entry), matches task persons to employees, and sends emails.
  */
 export async function sendTaskNotifications() {
+    if (!transporter) {
+        console.log('[MAILER] Transporter not configured. Skipping email notifications.');
+        return;
+    }
     try {
         // Load employee data
         const empRaw = await fs.readFile(EMPLOYEE_FILE, 'utf8');

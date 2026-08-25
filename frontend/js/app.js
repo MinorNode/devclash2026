@@ -31,6 +31,11 @@ async function loadMeetingData() {
     renderPastMeetings();
 }
 
+function escapeHTML(str) {
+    if (!str) return "";
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 function renderRecentMeeting() {
     if (!recentSummaryCard || !recentTasksBody || !recentNotesList || !taskCountBadge || !notesCountBadge) {
         console.error("Required elements for index page are missing.");
@@ -63,17 +68,17 @@ function renderRecentMeeting() {
     recentSummaryCard.innerHTML = `
         <div class="summary-top">
             <div>
-                <h3>${recentMeeting.title}</h3>
+                <h3>${escapeHTML(recentMeeting.title)}</h3>
 
                 <div class="meeting-meta">
-                    <span class="meta-pill">${recentMeeting.date}</span>
-                    <span class="meta-pill">${recentMeeting.time}</span>
+                    <span class="meta-pill">${escapeHTML(recentMeeting.date)}</span>
+                    <span class="meta-pill">${escapeHTML(recentMeeting.time)}</span>
                 </div>
             </div>
 
             <div class="summary-block">
                 <h4>Brief Summary</h4>
-                <p>${recentMeeting.briefSummary}</p>
+                <p>${escapeHTML(recentMeeting.briefSummary)}</p>
             </div>
         </div>
 
@@ -90,16 +95,18 @@ function renderRecentMeeting() {
     taskCountBadge.textContent = `${recentMeeting.tasks.length} Tasks`;
     notesCountBadge.textContent = `${recentMeeting.keyNotes.length} Notes`;
 
-    recentTasksBody.innerHTML = recentMeeting.tasks.map(task => `
+    recentTasksBody.innerHTML = recentMeeting.tasks.map(task => {
+        const text = task.task || task.text || "";
+        return `
         <tr>
-            <td>${task.person}</td>
-            <td>${task.task}</td>
-            <td><span class="deadline-pill">${task.deadline}</span></td>
+            <td>${escapeHTML(task.person || task.owner)}</td>
+            <td>${escapeHTML(text)}</td>
+            <td><span class="deadline-pill">${escapeHTML(task.deadline)}</span></td>
         </tr>
-    `).join("");
+    `}).join("");
 
     recentNotesList.innerHTML = recentMeeting.keyNotes.map(note => `
-        <li>${note}</li>
+        <li>${escapeHTML(note)}</li>
     `).join("");
 }
 
@@ -116,10 +123,10 @@ function renderPastMeetings() {
 
     pastMeetingsList.innerHTML = pastMeetings.map(meeting => `
         <div class="meeting-list-item" onclick="openMeetingPage(${meeting.id})">
-            <h4>${meeting.title}</h4>
+            <h4>${escapeHTML(meeting.title)}</h4>
             <div class="meeting-list-meta">
-                <span>${meeting.date}</span>
-                <span>${meeting.time}</span>
+                <span>${escapeHTML(meeting.date)}</span>
+                <span>${escapeHTML(meeting.time)}</span>
             </div>
         </div>
     `).join("");
