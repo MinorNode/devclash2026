@@ -5,6 +5,7 @@ window.onerror = function(msg, url, line, col, error) {
 import MicPipeline from './pipelines/micPipeline.js'
 import TabPipeline from './pipelines/tabPipeline.js'
 import { appendText, getTranscript, resetTranscript, showPanel, hidePanel } from './pipelines/liveTranscript.js'
+import { escapeHTML } from './utils.js'
 
 let micPipeline = null;
 let tabPipeline = null;
@@ -129,17 +130,18 @@ function renderAllTasks() {
 
     allTasksTableBody.innerHTML = userTasks.map(task => {
         const isDone = task.status.toLowerCase() === "done";
-        const safeTaskText = task.task.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const text = task.task || task.text || "";
+        const safeTaskText = text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const btnHtml = isDone ? "" : `<button class="secondary-btn" style="padding: 4px 10px; font-size: 12px;" onclick="window.markTaskDone('${task.meetingId}', '${safeTaskText}')">Mark Done</button>`;
 
         return `
         <tr>
-            <td>${task.meetingTitle}</td>
-            <td>${task.task}</td>
-            <td><span class="deadline-pill">${task.deadline}</span></td>
+            <td>${escapeHTML(task.meetingTitle)}</td>
+            <td>${escapeHTML(text)}</td>
+            <td><span class="deadline-pill">${escapeHTML(task.deadline)}</span></td>
             <td style="display: flex; align-items: center; gap: 10px;">
                 <span class="${isDone ? "status-pill status-done" : "status-pill status-pending"}">
-                    ${task.status}
+                    ${escapeHTML(task.status)}
                 </span>
                 ${btnHtml}
             </td>
@@ -178,13 +180,15 @@ function renderUrgentTasks() {
         return;
     }
 
-    urgentTasksList.innerHTML = urgentTasks.map(task => `
+    urgentTasksList.innerHTML = urgentTasks.map(task => {
+        const text = task.task || task.text || "";
+        return `
         <div class="deadline-item">
-            <h4>${task.task}</h4>
-            <p>${task.meetingTitle}</p>
-            <span class="deadline-pill">${task.deadline}</span>
+            <h4>${escapeHTML(text)}</h4>
+            <p>${escapeHTML(task.meetingTitle)}</p>
+            <span class="deadline-pill">${escapeHTML(task.deadline)}</span>
         </div>
-    `).join("");
+    `}).join("");
 }
 
 function renderMeetingOverview() {
@@ -192,13 +196,13 @@ function renderMeetingOverview() {
     recentMeetingsOverview.innerHTML = meetings.map(meeting => `
         <div class="glass-card overview-card" onclick="openMeetingPage(${meeting.id})">
             <div class="card-heading-row">
-                <h3>${meeting.title}</h3>
+                <h3>${escapeHTML(meeting.title)}</h3>
             </div>
             <div class="meeting-list-meta">
-                <span>${meeting.date}</span>
-                <span>${meeting.time}</span>
+                <span>${escapeHTML(meeting.date)}</span>
+                <span>${escapeHTML(meeting.time)}</span>
             </div>
-            <p class="overview-text">${meeting.briefSummary}</p>
+            <p class="overview-text">${escapeHTML(meeting.briefSummary)}</p>
         </div>
     `).join("");
 }
@@ -207,10 +211,10 @@ function renderPastMeetingsModalList() {
     if (!dashboardPastMeetingsList) return;
     dashboardPastMeetingsList.innerHTML = meetings.map(meeting => `
         <div class="meeting-list-item" onclick="openMeetingPage(${meeting.id})">
-            <h4>${meeting.title}</h4>
+            <h4>${escapeHTML(meeting.title)}</h4>
             <div class="meeting-list-meta">
-                <span>${meeting.date}</span>
-                <span>${meeting.time}</span>
+                <span>${escapeHTML(meeting.date)}</span>
+                <span>${escapeHTML(meeting.time)}</span>
             </div>
         </div>
     `).join("");

@@ -108,20 +108,13 @@ router.put('/task/status', async (req, res) => {
     const items = JSON.parse(data);
 
     let updated = false;
+    const meeting = items.find(m => m.id === meetingId);
 
-    for (let meeting of items) {
-      if (meeting.id === meetingId) {
-        if (meeting.tasks && meeting.tasks.length > 0) {
-          for (let task of meeting.tasks) {
-            // Task text matching
-            if ((task.task === taskText) || (task.text === taskText)) {
-              task.status = status;
-              updated = true;
-              break; // Found the task, stop searching in this meeting
-            }
-          }
-        }
-        if (updated) break; // Found the meeting & task, stop searching
+    if (meeting && Array.isArray(meeting.tasks)) {
+      const task = meeting.tasks.find(t => t.task === taskText || t.text === taskText);
+      if (task) {
+        task.status = status;
+        updated = true;
       }
     }
 

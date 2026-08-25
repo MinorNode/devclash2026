@@ -1,6 +1,11 @@
 const params = new URLSearchParams(window.location.search);
 const meetingId = params.get("id"); // Keep as string to match display.json
 
+function escapeHTML(str) {
+    if (!str) return "";
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 const detailsTitle = document.getElementById("detailsTitle");
 const detailsMeta = document.getElementById("detailsMeta");
 const heroMetaRow = document.getElementById("heroMetaRow");
@@ -34,8 +39,8 @@ async function loadMeetingDetails() {
     detailsMeta.textContent = "Complete meeting intelligence view with summary, tasks, notes, and downloadable report.";
 
     heroMetaRow.innerHTML = `
-        <span class="meta-pill">${selectedMeeting.date}</span>
-        <span class="meta-pill">${selectedMeeting.time}</span>
+        <span class="meta-pill">${escapeHTML(selectedMeeting.date)}</span>
+        <span class="meta-pill">${escapeHTML(selectedMeeting.time)}</span>
         <span class="meta-pill">${selectedMeeting.tasks.length} Tasks Assigned</span>
         <span class="meta-pill">${selectedMeeting.keyNotes.length} Key Notes</span>
     `;
@@ -44,11 +49,11 @@ async function loadMeetingDetails() {
         <section class="details-main-grid">
             <div class="glass-card content-card full-height-card">
                 <h3>Brief Summary</h3>
-                <p>${selectedMeeting.briefSummary}</p>
+                <p>${escapeHTML(selectedMeeting.briefSummary)}</p>
 
                 <div class="summary-highlight">
                     <h4>Detailed Summary</h4>
-                    <p>${selectedMeeting.detailedSummary}</p>
+                    <p>${escapeHTML(selectedMeeting.detailedSummary)}</p>
                 </div>
             </div>
 
@@ -56,13 +61,13 @@ async function loadMeetingDetails() {
                 <h3>Meeting Information</h3>
 
                 <span class="info-card-label">Meeting Title</span>
-                <p class="info-card-value">${selectedMeeting.title}</p>
+                <p class="info-card-value">${escapeHTML(selectedMeeting.title)}</p>
 
                 <span class="info-card-label">Date</span>
-                <p class="info-card-value">${selectedMeeting.date}</p>
+                <p class="info-card-value">${escapeHTML(selectedMeeting.date)}</p>
 
                 <span class="info-card-label">Time</span>
-                <p class="info-card-value">${selectedMeeting.time}</p>
+                <p class="info-card-value">${escapeHTML(selectedMeeting.time)}</p>
 
                 <span class="info-card-label">Total Tasks</span>
                 <p class="info-card-value">${selectedMeeting.tasks.length}</p>
@@ -82,13 +87,15 @@ async function loadMeetingDetails() {
                             </tr>
                         </thead>
                         <tbody>
-                            ${selectedMeeting.tasks.map(task => `
+                            ${selectedMeeting.tasks.map(task => {
+                                const text = task.task || task.text || "";
+                                return `
                                 <tr>
-                                    <td>${task.person}</td>
-                                    <td>${task.task}</td>
-                                    <td><span class="deadline-pill">${task.deadline}</span></td>
+                                    <td>${escapeHTML(task.person || task.owner)}</td>
+                                    <td>${escapeHTML(text)}</td>
+                                    <td><span class="deadline-pill">${escapeHTML(task.deadline)}</span></td>
                                 </tr>
-                            `).join("")}
+                            `}).join("")}
                         </tbody>
                     </table>
                 </div>
@@ -97,7 +104,7 @@ async function loadMeetingDetails() {
             <div class="glass-card content-card">
                 <h3>Key Notes</h3>
                 <ul class="notes-list compact">
-                    ${selectedMeeting.keyNotes.map(note => `<li>${note}</li>`).join("")}
+                    ${selectedMeeting.keyNotes.map(note => `<li>${escapeHTML(note)}</li>`).join("")}
                 </ul>
             </div>
         </section>

@@ -12,13 +12,19 @@ const DISPLAY_FILE = path.join(process.cwd(), 'data', 'display.json');
 
 // Google SMTP Config
 const GMAIL_USER = process.env.GMAIL_USER;
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
-    }
-});
+let transporter = null;
+
+if (GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+    transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+} else {
+    console.warn('[MAILER WARNING] GMAIL_USER or GMAIL_APP_PASSWORD is missing in .env. Notifications are disabled.');
+}
 
 /**
  * Resolve an employee's email from their name/alias.
@@ -81,6 +87,9 @@ function buildEmailHTML(employeeName, meetingTitle, tasks) {
  * Reads display.json (last entry), matches task persons to employees, and sends emails.
  */
 export async function sendTaskNotifications() {
+    if (!transporter) {
+        console.log('[MAILER] MOCK MODE: Transporter not configured. Emails will be logged to console instead of sent.');
+    }
     try {
         // Load employee data
         const empRaw = await fs.readFile(EMPLOYEE_FILE, 'utf8');
@@ -128,13 +137,17 @@ export async function sendTaskNotifications() {
             const taskCount = personTasks.length;
 
             try {
-                await transporter.sendMail({
-                    from: `"MeetTrack AI" <${GMAIL_USER}>`,
-                    to: employee.email,
-                    subject: `📋 ${taskCount} New Task${taskCount > 1 ? 's' : ''} Assigned — ${latestMeeting.title}`,
-                    html: html
-                });
-                console.log(`[MAILER] ✅ Email sent to ${employee.name} (${employee.email}) — ${taskCount} task(s)`);
+                if (transporter) {
+                    await transporter.sendMail({
+                        from: `"MeetTrack AI" <${GMAIL_USER}>`,
+                        to: employee.email,
+                        subject: `📋 ${taskCount} New Task${taskCount > 1 ? 's' : ''} Assigned — ${latestMeeting.title}`,
+                        html: html
+                    });
+                    console.log(`[MAILER] ✅ Email sent to ${employee.name} (${employee.email}) — ${taskCount} task(s)`);
+                } else {
+                    console.log(`\n--- [MOCK EMAIL to ${employee.email}] ---\nSUBJECT: 📋 ${taskCount} New Task${taskCount > 1 ? 's' : ''} Assigned — ${latestMeeting.title}\nBODY HTML:\n${html}\n-----------------------------------\n`);
+                }
             } catch (mailErr) {
                 console.error(`[MAILER] ❌ Failed to email ${employee.name}: ${mailErr.message}`);
             }

@@ -1,5 +1,6 @@
 // Manager Oversight Dashboard — manager.js
 // Fetches all meetings from display.json and renders team-wide analytics.
+import { escapeHTML } from './utils.js';
 
 // Auth + Role guard — only managers can access this page
 const sessionData = localStorage.getItem("meettrack_user");
@@ -129,13 +130,13 @@ function renderTeamTasks() {
 
         return `
         <tr>
-            <td><strong>${task.owner}</strong></td>
-            <td>${task.text}</td>
-            <td><span class="deadline-pill">${task.deadline}</span></td>
-            <td><span class="priority-pill priority-${task.priority.toLowerCase()}">${task.priority}</span></td>
+            <td><strong>${escapeHTML(task.owner)}</strong></td>
+            <td>${escapeHTML(task.text)}</td>
+            <td><span class="deadline-pill">${escapeHTML(task.deadline)}</span></td>
+            <td><span class="priority-pill priority-${task.priority.toLowerCase()}">${escapeHTML(task.priority)}</span></td>
             <td style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span class="status-pill ${isDone ? 'status-done' : 'status-pending'}">
-                    ${task.status}
+                    ${escapeHTML(task.status)}
                 </span>
                 ${btnHtml}
             </td>
@@ -178,11 +179,11 @@ function renderPriorityDeadlines() {
     priorityDeadlinesList.innerHTML = critical.map(task => `
         <div class="deadline-item critical-item">
             <div style="display: flex; justify-content: space-between; align-items: start;">
-                <h4>${task.text}</h4>
+                <h4>${escapeHTML(task.text)}</h4>
                 <span class="priority-pill priority-high">HIGH</span>
             </div>
-            <p>Assigned to: <strong>${task.owner}</strong></p>
-            <p style="font-size: 13px; opacity: 0.7;">Meeting: ${task.meetingTitle}</p>
+            <p>Assigned to: <strong>${escapeHTML(task.owner)}</strong></p>
+            <p style="font-size: 13px; opacity: 0.7;">Meeting: ${escapeHTML(task.meetingTitle)}</p>
         </div>
     `).join("");
 }

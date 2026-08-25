@@ -75,26 +75,45 @@ def process_meeting(raw_entry, client):
     """
     
     try:
-        response = client.chat_completion(
-            messages=[
-                {"role": "system", "content": "You are a professional meeting assistant. Output strictly valid JSON."},
-                {"role": "user", "content": prompt},
-            ],
-            max_tokens=1024,
-            temperature=0.1,
-        )
-        
-        response_text = response.choices[0].message.content
-        
-        # Extract JSON from response
-        clean_json = response_text.strip()
-        if clean_json.startswith("```json"):
-            clean_json = clean_json.split("```json")[1].split("```")[0].strip()
-        elif "{" in clean_json:
-            # Fallback to finding the first { and last }
-            start = clean_json.find("{")
-            end = clean_json.rfind("}") + 1
-            clean_json = clean_json[start:end]
+        if not HF_TOKEN:
+            print("[LLM] MOCK MODE: No HF_TOKEN found. Returning mock analysis.")
+            clean_json = """
+            {
+                "briefSummary": "[MOCK] The team discussed finalizing the UI design and assigning backend tasks.",
+                "detailedSummary": "[MOCK] During the meeting, John suggested that the frontend UI design needs to be completed by tomorrow. Jane agreed to oversee the database deployment to ensure backend stability. A discussion on integration tests was tabled for next week.",
+                "topics": ["UI Design", "Backend Deployment", "Database"],
+                "tasks": [
+                    { "person": "John", "task": "Finalize UI design mockups", "deadline": "Tomorrow" },
+                    { "person": "Jane", "task": "Deploy the database and test connections", "deadline": "Friday" },
+                    { "person": "Alex", "task": "Prepare integration testing framework", "deadline": "Next week" }
+                ],
+                "keyNotes": [
+                    "UI design is a priority for this week.",
+                    "Integration tests will be discussed in the next sync."
+                ]
+            }
+            """
+        else:
+            response = client.chat_completion(
+                messages=[
+                    {"role": "system", "content": "You are a professional meeting assistant. Output strictly valid JSON."},
+                    {"role": "user", "content": prompt},
+                ],
+                max_tokens=1024,
+                temperature=0.1,
+            )
+            
+            response_text = response.choices[0].message.content
+            
+            # Extract JSON from response
+            clean_json = response_text.strip()
+            if clean_json.startswith("```json"):
+                clean_json = clean_json.split("```json")[1].split("```")[0].strip()
+            elif "{" in clean_json:
+                # Fallback to finding the first { and last }
+                start = clean_json.find("{")
+                end = clean_json.rfind("}") + 1
+                clean_json = clean_json[start:end]
             
         analysis = json.loads(clean_json)
     except Exception as e:
