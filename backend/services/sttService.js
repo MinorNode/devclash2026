@@ -11,6 +11,12 @@ export async function transcribeAudio(buffer, label) {
       return "";
     }
 
+    if (!ASSEMBLY_API_KEY) {
+      console.log(`[STT][${label}] MOCK MODE: No API key found. Returning mock transcript.`);
+      // Return a realistic mock transcript chunk
+      return "Mock Transcript: We need to finalize the UI design tomorrow and assign the backend tasks. Let's make sure the database is up and running.";
+    }
+
     console.log("[STT] Uploading via stream, size:", buffer.length);
 
     const stream = Readable.from(buffer);

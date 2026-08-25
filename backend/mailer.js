@@ -88,8 +88,7 @@ function buildEmailHTML(employeeName, meetingTitle, tasks) {
  */
 export async function sendTaskNotifications() {
     if (!transporter) {
-        console.log('[MAILER] Transporter not configured. Skipping email notifications.');
-        return;
+        console.log('[MAILER] MOCK MODE: Transporter not configured. Emails will be logged to console instead of sent.');
     }
     try {
         // Load employee data
@@ -138,13 +137,17 @@ export async function sendTaskNotifications() {
             const taskCount = personTasks.length;
 
             try {
-                await transporter.sendMail({
-                    from: `"MeetTrack AI" <${GMAIL_USER}>`,
-                    to: employee.email,
-                    subject: `📋 ${taskCount} New Task${taskCount > 1 ? 's' : ''} Assigned — ${latestMeeting.title}`,
-                    html: html
-                });
-                console.log(`[MAILER] ✅ Email sent to ${employee.name} (${employee.email}) — ${taskCount} task(s)`);
+                if (transporter) {
+                    await transporter.sendMail({
+                        from: `"MeetTrack AI" <${GMAIL_USER}>`,
+                        to: employee.email,
+                        subject: `📋 ${taskCount} New Task${taskCount > 1 ? 's' : ''} Assigned — ${latestMeeting.title}`,
+                        html: html
+                    });
+                    console.log(`[MAILER] ✅ Email sent to ${employee.name} (${employee.email}) — ${taskCount} task(s)`);
+                } else {
+                    console.log(`\n--- [MOCK EMAIL to ${employee.email}] ---\nSUBJECT: 📋 ${taskCount} New Task${taskCount > 1 ? 's' : ''} Assigned — ${latestMeeting.title}\nBODY HTML:\n${html}\n-----------------------------------\n`);
+                }
             } catch (mailErr) {
                 console.error(`[MAILER] ❌ Failed to email ${employee.name}: ${mailErr.message}`);
             }
